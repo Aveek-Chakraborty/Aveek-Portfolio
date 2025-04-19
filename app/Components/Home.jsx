@@ -6,6 +6,7 @@ import { motion, useScroll, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaEnvelope, FaPaperPlane, FaInstagram, FaUser, FaTag, FaComment } from 'react-icons/fa';
 import { Code, Server, Database, Wrench, Zap, Code2Icon } from 'lucide-react';
 import { RiArrowRightSLine, RiNextjsLine } from 'react-icons/ri';
+import { useForm, ValidationError } from '@formspree/react';
 import HomePage from './Hero';
 import {
     FaReact,
@@ -52,6 +53,8 @@ export default function Home() {
     const [isMounted, setIsMounted] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [activeCategory, setActiveCategory] = useState('frontend');
+    const [state, handleSubmit] = useForm("xqaprqqb");
+
 
 
     const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
@@ -61,6 +64,8 @@ export default function Home() {
     const projectsRef = useRef(null);
     const experienceRef = useRef(null);
     const contactRef = useRef(null);
+    const formRef = useRef(null);
+
 
     const { scrollY } = useScroll();
     useEffect(() => {
@@ -242,6 +247,12 @@ export default function Home() {
             { name: 'VSCode', icon: 'vscode', featured: true }
         ]
     };
+
+    useEffect(() => {
+        if (state.succeeded && formRef.current) {
+          formRef.current.reset(); 
+        }
+      }, [state.succeeded]);
 
 
     if (!isMounted) {
@@ -1117,7 +1128,7 @@ export default function Home() {
                 {/* Animated background elements */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-orange-950/10 to-orange-950/30 z-0"></div>
 
-                
+
 
                 <div className="container mx-auto px-4 relative z-10">
                     <motion.div
@@ -1225,19 +1236,21 @@ export default function Home() {
                             <div className="backdrop-blur-lg bg-black/40 p-8 rounded-3xl border border-gray-800/50 shadow-2xl relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl -ml-20 -mt-20"></div>
                                 <div className="absolute bottom-0 right-0 w-32 h-32 bg-orange-600/20 rounded-full blur-3xl -mr-16 -mb-16"></div>
-        
+
                                 <h3 className="text-3xl font-bold mb-6 text-white">Send a <span className="text-orange-400">Message</span></h3>
 
-                                <form className="space-y-5 relative z-10">
+                                <form ref={formRef} className="space-y-5 relative z-10" onSubmit={handleSubmit}>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                         <div className="relative">
                                             <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
                                             <input
                                                 type="text"
                                                 id="name"
+                                                name="name"
                                                 className="w-full bg-black/50 border border-gray-700/70 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-300"
                                                 placeholder="John Doe"
                                             />
+                                            <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-500 text-xs mt-1" />
                                             <div className="absolute right-3 top-8 text-orange-400 opacity-70">
                                                 <FaUser className="text-sm" />
                                             </div>
@@ -1248,9 +1261,11 @@ export default function Home() {
                                             <input
                                                 type="email"
                                                 id="email"
+                                                name="email"
                                                 className="w-full bg-black/50 border border-gray-700/70 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-300"
                                                 placeholder="john@example.com"
                                             />
+                                            <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-500 text-xs mt-1" />
                                             <div className="absolute right-3 top-8 text-orange-400 opacity-70">
                                                 <FaEnvelope className="text-sm" />
                                             </div>
@@ -1262,9 +1277,11 @@ export default function Home() {
                                         <input
                                             type="text"
                                             id="subject"
+                                            name="subject"
                                             className="w-full bg-black/50 border border-gray-700/70 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-300"
                                             placeholder="How can I help you?"
                                         />
+                                        <ValidationError prefix="Subject" field="subject" errors={state.errors} className="text-red-500 text-xs mt-1" />
                                         <div className="absolute right-3 top-8 text-orange-400 opacity-70">
                                             <FaTag className="text-sm" />
                                         </div>
@@ -1274,10 +1291,12 @@ export default function Home() {
                                         <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">Your Message</label>
                                         <textarea
                                             id="message"
+                                            name="message"
                                             rows="4"
                                             className="w-full bg-black/50 border border-gray-700/70 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all duration-300"
                                             placeholder="Tell me about your project or inquiry..."
                                         ></textarea>
+                                        <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-500 text-xs mt-1" />
                                         <div className="absolute right-3 top-8 text-orange-400 opacity-70">
                                             <FaComment className="text-sm" />
                                         </div>
@@ -1286,11 +1305,12 @@ export default function Home() {
                                     <div className="pt-1">
                                         <button
                                             type="submit"
+                                            disabled={state.submitting}
                                             className="w-full bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-600 hover:to-orange-800 text-white py-3 px-6 rounded-xl font-medium transition-all duration-300 shadow-lg shadow-orange-900/30 relative overflow-hidden group"
                                         >
                                             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-orange-400 to-orange-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100 origin-left"></span>
                                             <span className="relative flex items-center justify-center gap-2">
-                                                Send Message
+                                                {state.submitting ? "Sending..." : "Send Message"}
                                                 <FaPaperPlane className="text-sm group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                             </span>
                                         </button>
