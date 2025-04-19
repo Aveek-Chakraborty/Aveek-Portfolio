@@ -1399,77 +1399,7 @@ export default function Home() {
                                             This information only appears in the modal view.
                                         </motion.p>
 
-                                        {/* Additional Project Images - Responsive Grid */}
-                                        <motion.div
-                                            variants={{
-                                                hidden: { opacity: 0 },
-                                                visible: {
-                                                    opacity: 1,
-                                                    transition: {
-                                                        staggerChildren: 0.1
-                                                    }
-                                                }
-                                            }}
-                                            className="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-6"
-                                        >
-                                            {[1, 2, 3].map((num) => (
-                                                <motion.div
-                                                    key={num}
-                                                    variants={{
-                                                        hidden: { opacity: 0, y: 20 },
-                                                        visible: { opacity: 1, y: 0 }
-                                                    }}
-                                                    whileHover={{
-                                                        scale: 1.05,
-                                                        transition: { type: "spring", stiffness: 300 }
-                                                    }}
-                                                    className="aspect-video bg-gray-800 rounded-md overflow-hidden"
-                                                >
-                                                    <img
-                                                        src={`/api/placeholder/${isMobile ? '120/80' : '200/150'}`}
-                                                        alt={`${selectedProject.title} screenshot ${num}`}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                </motion.div>
-                                            ))}
-                                        </motion.div>
-
-                                        {/* Key Features */}
-                                        <motion.div
-                                            variants={{
-                                                hidden: { opacity: 0, y: 10 },
-                                                visible: { opacity: 1, y: 0 }
-                                            }}
-                                            className="mb-4 sm:mb-6"
-                                        >
-                                            <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-orange-400">Key Features</h4>
-                                            <motion.ul
-                                                variants={{
-                                                    hidden: { opacity: 0 },
-                                                    visible: {
-                                                        opacity: 1,
-                                                        transition: {
-                                                            staggerChildren: 0.1
-                                                        }
-                                                    }
-                                                }}
-                                                className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 text-sm"
-                                            >
-                                                {["Feature 1", "Feature 2", "Feature 3", "Feature 4"].map((feature, idx) => (
-                                                    <motion.li
-                                                        key={idx}
-                                                        variants={{
-                                                            hidden: { opacity: 0, x: -10 },
-                                                            visible: { opacity: 1, x: 0 }
-                                                        }}
-                                                        className="flex items-center text-gray-300"
-                                                    >
-                                                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2"></span>
-                                                        {feature}
-                                                    </motion.li>
-                                                ))}
-                                            </motion.ul>
-                                        </motion.div>
+                                        
 
                                         {/* Action Buttons */}
                                         <motion.div
@@ -1479,20 +1409,6 @@ export default function Home() {
                                             }}
                                             className="flex flex-wrap gap-3 sm:gap-4 mt-6 sm:mt-8"
                                         >
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="bg-orange-500 hover:bg-orange-600 text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg font-medium transition-colors flex items-center text-sm"
-                                            >
-                                                <span>Live Demo</span>
-                                                <motion.span
-                                                    animate={{ x: 0 }}
-                                                    whileHover={{ x: 4 }}
-                                                    className="ml-1 inline-block"
-                                                >
-                                                    <RiArrowRightSLine />
-                                                </motion.span>
-                                            </motion.button>
 
                                             <motion.button
                                                 whileHover={{ scale: 1.05 }}
