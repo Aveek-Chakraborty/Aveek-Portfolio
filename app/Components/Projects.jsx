@@ -1,14 +1,12 @@
 "use client"
 
-import { useEffect, useCallback,useState } from 'react';
-import { motion,  AnimatePresence } from 'framer-motion';
+import { useEffect, useCallback, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { RiCloseLine } from 'react-icons/ri';
 import { FaChevronLeft, FaChevronRight, FaGithub } from 'react-icons/fa';
 
-
-
-const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef, setIsMobile ,  isMobile ,mousePosition , modalOpen,selectedProject }) => {
+const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef, setIsMobile, isMobile, mousePosition, modalOpen, selectedProject }) => {
     const projects = [
         {
             title: "Portfolio Dashboard",
@@ -43,16 +41,19 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
     ];
 
     const totalProjects = projects.length;
-
     const [activeIndex, setActiveIndex] = useState(1);
+    // Create a local ref to ensure we can properly manage animation state
+    const localAnimatingRef = useRef(false);
 
     const navigateCarousel = useCallback((direction) => {
-        if (isAnimatingRef.current) return; // Prevent navigation during animation
-
-        isAnimatingRef.current = true; // Use ref instead of state to avoid render
+        // Use local ref to check if animation is in progress
+        if (localAnimatingRef.current) return;
+        
+        // Set both refs to prevent double clicks
+        localAnimatingRef.current = true;
+        if (isAnimatingRef) isAnimatingRef.current = true;
 
         setActiveIndex((prev) => {
-            // Single state update with function
             return direction === 'next'
                 ? (prev === totalProjects - 1 ? 0 : prev + 1)
                 : (prev === 0 ? totalProjects - 1 : prev - 1);
@@ -60,12 +61,20 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
 
         // Release animation lock after transition completes
         setTimeout(() => {
-            isAnimatingRef.current = false; // Using ref doesn't trigger rerender
-        }, 100);
-    }, [totalProjects]); // Use totalProjects constant which is defined before this function
+            localAnimatingRef.current = false;
+            if (isAnimatingRef) isAnimatingRef.current = false;
+        }, 300); // Increased to ensure animation completes
+    }, [totalProjects, isAnimatingRef]);
 
-    const nextProject = useCallback(() => navigateCarousel('next'), [navigateCarousel]);
-    const prevProject = useCallback(() => navigateCarousel('prev'), [navigateCarousel]);
+    const nextProject = useCallback((e) => {
+        e.stopPropagation(); // Prevent event bubbling
+        navigateCarousel('next');
+    }, [navigateCarousel]);
+    
+    const prevProject = useCallback((e) => {
+        e.stopPropagation(); // Prevent event bubbling
+        navigateCarousel('prev');
+    }, [navigateCarousel]);
 
     // Single useEffect for responsive detection
     useEffect(() => {
@@ -77,36 +86,39 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
         window.addEventListener('resize', checkMobile);
 
         return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+    }, [setIsMobile]);
 
     // Auto carousel effect with stable callbacks to prevent rerenders
     useEffect(() => {
         // Don't auto-advance during manual navigation
         const interval = setInterval(() => {
-            if (!isAnimatingRef.current) {
-                nextProject();
+            if (!localAnimatingRef.current && isAnimatingRef && !isAnimatingRef.current) {
+                setActiveIndex((prev) => (prev === totalProjects - 1 ? 0 : prev + 1));
             }
         }, 6000);
 
         return () => clearInterval(interval);
-    }, [nextProject]); // Only depend on the stable nextProject callback
+    }, [totalProjects, isAnimatingRef]);
 
     const goToProject = useCallback((index) => {
-        if (isAnimatingRef.current || index === activeIndex) return;
+        if (localAnimatingRef.current || index === activeIndex) return;
 
-        isAnimatingRef.current = true;
+        localAnimatingRef.current = true;
+        if (isAnimatingRef) isAnimatingRef.current = true;
+        
         setActiveIndex(index);
 
         setTimeout(() => {
-            isAnimatingRef.current = false;
-        }, 200);
-    }, [activeIndex]);
+            localAnimatingRef.current = false;
+            if (isAnimatingRef) isAnimatingRef.current = false;
+        }, 300);
+    }, [activeIndex, isAnimatingRef]);
 
     // Handle modal opening
     const openModal = useCallback((project) => {
         setSelectedProject(project);
         setModalOpen(true);
-    }, []);
+    }, [setSelectedProject, setModalOpen]);
 
     // Calculate carousel card variants based on screen size - memoized to prevent recreations
     const getCardVariants = useCallback((position) => {
@@ -131,9 +143,8 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
     }, [isMobile]);
 
     const gradientStyle = {
-        background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(255, 165, 0, 0.15), rgba(255, 165, 0, 0.05), transparent 40%)`,
+        background: `radial-gradient(circle at ${mousePosition?.x ?? 0}px ${mousePosition?.y ?? 0}px, rgba(255, 165, 0, 0.15), rgba(255, 165, 0, 0.05), transparent 40%)`,
     };
-
 
     return (
         <section id="projects" ref={projectsRef} className="py-12 sm:py-20 md:py-32 relative overflow-hidden">
@@ -196,9 +207,9 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
                     <div className="relative h-80 sm:h-96 mb-16">
                         {/* Left Arrow - No hover animations on mobile */}
                         <button
-                            className={`absolute -left-2 md:left-2 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-orange-600/70 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center backdrop-blur-sm ${isAnimatingRef.current ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'}`}
+                            className={`absolute -left-2 md:left-2 top-1/2 -translate-y-1/2 z-300 bg-black/50 hover:bg-orange-600/70 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center backdrop-blur-sm ${localAnimatingRef.current ? 'opacity-100 cursor-pointer' : 'opacity-100 cursor-pointer'}`}
                             onClick={prevProject}
-                            disabled={isAnimatingRef.current}
+                            // disabled={localAnimatingRef.current}
                         >
                             <FaChevronLeft className="text-sm sm:text-base" />
                         </button>
@@ -410,9 +421,9 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
 
                         {/* Right Arrow - No hover animations on mobile */}
                         <button
-                            className={`absolute -right-2 md:right-2 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-orange-600/70 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center backdrop-blur-sm ${isAnimatingRef.current ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'}`}
+                            className={`absolute -right-2 md:right-2 top-1/2 -translate-y-1/2 z-300 bg-black/50 hover:bg-orange-600/70 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center backdrop-blur-sm ${localAnimatingRef.current ? 'opacity-100 cursor-pointer' : 'opacity-100 cursor-pointer'}`}
                             onClick={nextProject}
-                            disabled={isAnimatingRef.current}
+                            // disabled={localAnimatingRef.current}
                         >
                             <FaChevronRight className="text-sm sm:text-base" />
                         </button>
@@ -426,7 +437,7 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
                                         onClick={() => goToProject(index)}
                                         className={`h-1.5 rounded-full transition-all duration-300 ${index === activeIndex ? 'bg-orange-500 w-6' : 'bg-gray-600 w-2'
                                             }`}
-                                        disabled={isAnimatingRef.current}
+                                        disabled={localAnimatingRef.current}
                                     />
                                 ) : (
                                     <motion.button
@@ -440,7 +451,7 @@ const Projects = ({setModalOpen, setSelectedProject, isAnimatingRef, projectsRef
                                         }}
                                         whileHover={{ scale: 1.2, opacity: 1 }}
                                         transition={{ duration: 0.2 }}
-                                        disabled={isAnimatingRef.current}
+                                        disabled={localAnimatingRef.current}
                                     />
                                 )
                             ))}
