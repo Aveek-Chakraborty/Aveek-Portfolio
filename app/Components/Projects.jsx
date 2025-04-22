@@ -6,7 +6,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import { RiCloseLine } from 'react-icons/ri';
 import { FaChevronLeft, FaChevronRight, FaGithub } from 'react-icons/fa';
 
-const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRef, setIsMobile, isMobile, mousePosition, modalOpen, selectedProject }) => {
+const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRef, setIsMobile, isMobile, modalOpen, selectedProject }) => {
     const projects = [
         {
             title: "Portfolio Dashboard",

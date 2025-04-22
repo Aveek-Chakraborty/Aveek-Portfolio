@@ -886,7 +886,6 @@ export default function Home() {
                 projectsRef={projectsRef}
                 setIsMobile={setIsMobile}
                 isMobile={isMobile}
-                mousePosition={mousePosition}
                 modalOpen={modalOpen}
                 selectedProject={selectedProject}
             />
