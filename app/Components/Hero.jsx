@@ -282,7 +282,7 @@ const HomePage = ({ setActiveSection, setIsNavOpen, homeRef }) => {
               transition={{ delay: 2.2, duration: 0.8 }}
             >
               <motion.button
-                onClick={() => scrollTo('about')}
+                onClick={() => scrollTo('projects')}
                 onHoverStart={() => setIsButtonHovering(true)}
                 onHoverEnd={() => setIsButtonHovering(false)}
                 whileHover={{
