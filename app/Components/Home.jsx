@@ -5,9 +5,7 @@ import Head from 'next/head';
 import { motion, useScroll, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaEnvelope, FaPaperPlane, FaInstagram, FaUser, FaTag, FaComment } from 'react-icons/fa';
 import { Code, Server, Database, Wrench, Zap, Code2Icon } from 'lucide-react';
-import { RiArrowRightSLine, RiNextjsLine } from 'react-icons/ri';
-import { RiCloseLine } from 'react-icons/ri';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { RiNextjsLine } from 'react-icons/ri';
 import { useForm, ValidationError } from '@formspree/react';
 import HomePage from './Hero';
 import {
@@ -113,7 +111,6 @@ export default function Home() {
         ]
     };
 
-    // Now declare state and refs
     const [activeSection, setActiveSection] = useState('home');
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isMounted, setIsMounted] = useState(false);
@@ -124,9 +121,8 @@ export default function Home() {
     const [state, handleSubmit] = useForm("xqaprqqb");
     const [isMobile, setIsMobile] = useState(false);
 
-    // Convert isAnimating from state to ref to prevent rerenders
-    const isAnimatingRef = useRef(false);
 
+    const isAnimatingRef = useRef(false);
     const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
     const homeRef = useRef(null);
     const aboutRef = useRef(null);
@@ -172,7 +168,7 @@ export default function Home() {
         };
     }, []);
 
-    // Form reset effect
+
     useEffect(() => {
         if (state.succeeded && formRef.current) {
             formRef.current.reset();
@@ -240,7 +236,7 @@ export default function Home() {
     }
 
     return (
-        // Return statement continues here
+
         <div className="min-h-screen bg-black text-white overflow-x-hidden">
             <Head>
                 <title>Aveek Chakraborty | Full Stack Developer</title>
@@ -250,10 +246,9 @@ export default function Home() {
 
             <div className="fixed inset-0 pointer-events-none" style={gradientStyle}></div>
 
-            {/* MacOS-style Navbar */}
             <nav className="fixed top-6 right-12 md:right-1/2 transform translate-x-1/2 z-50">
                 <div className="backdrop-blur-lg bg-black/40 rounded-2xl border border-orange-500/20 shadow-xl transition-all duration-300 hover:shadow-orange-500/10">
-                    {/* Desktop Menu */}
+                   
                     <div className="hidden md:flex items-center px-6 py-3">
                         {sections.map((section, index) => (
                             <div key={section} className="relative mx-2">
@@ -275,7 +270,7 @@ export default function Home() {
                         ))}
                     </div>
 
-                    {/* Mobile Menu Button - Now positioned to the left side within container */}
+                    
                     <div className="md:hidden flex items-center justify-between p-3">
                         <button
                             onClick={() => setIsNavOpen(!isNavOpen)}
@@ -291,7 +286,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Mobile Menu - Enhanced animations */}
+                
                 <AnimatePresence>
                     {isNavOpen && (
                         <motion.div
@@ -309,28 +304,28 @@ export default function Home() {
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.05 }}
-                                        // Modified click handler to ensure proper scrolling in mobile
+                                        
                                         onClick={() => {
-                                            // First close the menu
+                                            
                                             setIsNavOpen(false);
 
-                                            // Short timeout to allow the menu closing animation to start
+                                            
                                             setTimeout(() => {
-                                                // Then scroll to the section
+                                                
                                                 const element = document.getElementById(section);
                                                 if (element) {
-                                                    // Get the element's position accounting for any fixed headers
-                                                    const yOffset = -80; // Adjust this offset as needed
+                                                    
+                                                    const yOffset = -80; 
                                                     const elementPosition = element.getBoundingClientRect().top;
                                                     const offsetPosition = elementPosition + window.pageYOffset + yOffset;
 
-                                                    // Smooth scroll to the element
+                                                    
                                                     window.scrollTo({
                                                         top: offsetPosition,
                                                         behavior: 'smooth'
                                                     });
 
-                                                    // Update active section
+                                                    
                                                     setActiveSection(section);
                                                     if (section === 'home') {
                                                         setActiveSection('home');
@@ -365,7 +360,6 @@ export default function Home() {
                 </AnimatePresence>
             </nav>
 
-            {/* Hero Section */}
             <HomePage homeRef={homeRef} setActiveSection={setActiveSection} setIsNavOpen={setIsNavOpen} />
 
             <section id="about" ref={aboutRef} className="py-20 md:py-32 relative overflow-hidden">
@@ -395,7 +389,7 @@ export default function Home() {
                 <div className="absolute top-60 right-1/3 w-7 h-7 border border-orange-500/10 rounded-full animate-[float_10s_ease-in-out_infinite_1.3s]"></div>
                 <div className="absolute bottom-32 left-32 w-9 h-9 border border-orange-400/5 rounded-md rotate-30 animate-[float_11s_ease-in-out_infinite_0.2s]"></div>
 
-                {/* Add keyframes animation styling */}
+                
                 <style jsx>{`
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
@@ -598,7 +592,6 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* Skills Section */}
             <section id="skills" ref={skillsRef} className="py-24 md:py-32 relative overflow-hidden bg-black">
                 {/* Optimized background effects */}
                 <div className="absolute inset-0 z-0">
@@ -878,8 +871,7 @@ export default function Home() {
     `}</style>
             </section>
 
-            {/* Projects Section */}
-            <Projects 
+            <Projects
                 setModalOpen={setModalOpen}
                 setSelectedProject={setSelectedProject}
                 isAnimatingRef={isAnimatingRef}
@@ -890,7 +882,6 @@ export default function Home() {
                 selectedProject={selectedProject}
             />
 
-            {/* Experience Section */}
             <section id="experience" ref={experienceRef} className="py-20 md:py-32 relative overflow-hidden bg-black/80">
                 {/* Enhanced gradient background */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-orange-950/10 to-black/60 z-0"></div>
@@ -1026,7 +1017,6 @@ export default function Home() {
             </section>
 
 
-            {/* Contact Section */}
             <section id="contact" ref={contactRef} className="py-20 md:py-32 relative overflow-hidden">
                 {/* Animated background elements */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-orange-950/10 to-orange-950/30 z-0"></div>
@@ -1261,7 +1251,6 @@ export default function Home() {
     `}</style>
             </section>
 
-            {/* Footer */}
             <footer className="py-12 bg-black/90 border-t border-gray-800">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center">
@@ -1292,7 +1281,6 @@ export default function Home() {
                     </div>
                 </div>
             </footer>
-
 
         </div>
     );

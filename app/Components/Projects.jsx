@@ -4,7 +4,9 @@ import { useEffect, useCallback, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { RiCloseLine } from 'react-icons/ri';
-import { FaChevronLeft, FaChevronRight, FaGithub } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import { MdDevices, MdSecurity, MdSpeed, MdOutlineDesignServices } from 'react-icons/md';
+import { FaLaptopCode } from 'react-icons/fa';
 
 const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRef, setIsMobile, isMobile, modalOpen, selectedProject }) => {
     const projects = [
@@ -12,31 +14,91 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
             title: "Portfolio Dashboard",
             description: "A modern analytics dashboard for tracking financial portfolios with real-time data visualization.",
             tech: ["React", "TailwindCSS", "Firebase", "Chart.js"],
-            image: "Aveek.jpg"
+            image: "Aveek.jpg",
+            longDescription: "A comprehensive financial portfolio tracking system designed for investors to monitor assets across multiple markets. The dashboard provides real-time updates and historical performance analysis.",
+            features: [
+                "Real-time stock price updates with WebSocket integration",
+                "Interactive charts with zoom and filtering capabilities",
+                "Portfolio diversification analysis and risk assessment",
+                "Performance benchmarking against market indices",
+                "Automated alerts for price movements"
+            ],
+            screenshots: ["dashboard.jpg", "chart-view.jpg", "portfolio-analysis.jpg"],
+            challengesSolved: "Implemented efficient data caching strategies to minimize API calls while maintaining real-time data accuracy. Created a responsive design system that adapts to various device sizes without compromising on functionality.",
+            githubLink: "https://github.com/username/portfolio-dashboard",
+            liveDemo: "https://portfolio-dashboard-demo.com"
         },
         {
             title: "E-commerce Platform",
             description: "Full-featured e-commerce solution with cart functionality, payment processing, and order management.",
             tech: ["Next.js", "MongoDB", "Stripe", "Redux"],
-            image: "Aveek.jpg"
+            image: "Aveek.jpg",
+            longDescription: "A scalable e-commerce platform built with Next.js that offers seamless shopping experiences with advanced features for both customers and store administrators.",
+            features: [
+                "Dynamic product catalog with filtering and search",
+                "Secure checkout process with Stripe integration",
+                "User account management and order history",
+                "Admin dashboard for inventory and order management",
+                "SEO optimization for product pages"
+            ],
+            screenshots: ["store-front.jpg", "product-detail.jpg", "checkout-process.jpg"],
+            challengesSolved: "Implemented server-side rendering for improved SEO and page load times. Created a robust state management system with Redux to handle complex shopping cart operations across multiple devices.",
+            githubLink: "https://github.com/username/ecommerce-platform",
+            liveDemo: "https://ecommerce-demo.com"
         },
         {
             title: "AI Image Generator",
             description: "Web application that creates original artwork using advanced image generation algorithms.",
             tech: ["Python", "TensorFlow", "React", "Flask"],
-            image: "Aveek.jpg"
+            image: "Aveek.jpg",
+            longDescription: "An innovative AI-powered platform that lets users create unique artwork by describing their vision in natural language. The application uses state-of-the-art diffusion models to generate high-quality images.",
+            features: [
+                "Text-to-image generation with prompt engineering",
+                "Style transfer capabilities from reference images",
+                "Resolution enhancement and image correction tools",
+                "Gallery system for saving and sharing creations",
+                "Batch processing for multiple generations"
+            ],
+            screenshots: ["generator-ui.jpg", "sample-outputs.jpg", "style-transfer.jpg"],
+            challengesSolved: "Optimized the machine learning pipeline to reduce generation time while maintaining image quality. Implemented a caching system to store frequently requested styles and elements to improve response time.",
+            githubLink: "https://github.com/username/ai-image-generator",
+            liveDemo: "https://ai-image-generator-demo.com"
         },
         {
             title: "Blockchain Explorer",
             description: "Tool for visualizing and navigating blockchain data with detailed transaction analysis.",
             tech: ["Ethereum", "Web3.js", "Node.js", "D3.js"],
-            image: "Aveek.jpg"
+            image: "Aveek.jpg",
+            longDescription: "A comprehensive blockchain explorer that provides deep insights into blockchain networks. The tool visualizes complex blockchain data structures and transaction flows in an intuitive interface.",
+            features: [
+                "Real-time block and transaction monitoring",
+                "Address tracking and balance history",
+                "Smart contract interaction and verification",
+                "Network statistics and mining information",
+                "Gas price analysis and optimization suggestions"
+            ],
+            screenshots: ["blockchain-overview.jpg", "transaction-details.jpg", "network-stats.jpg"],
+            challengesSolved: "Developed custom data indexing algorithms to efficiently retrieve and display large volumes of blockchain data. Created interactive visualization components using D3.js to represent complex blockchain structures.",
+            githubLink: "https://github.com/username/blockchain-explorer",
+            liveDemo: "https://blockchain-explorer-demo.com"
         },
         {
             title: "Social Media Manager",
             description: "Scheduling and analytics platform for managing multiple social media accounts efficiently.",
             tech: ["Vue.js", "Express", "PostgreSQL", "OAuth"],
-            image: "Aveek.jpg"
+            image: "Aveek.jpg",
+            longDescription: "An all-in-one solution for social media professionals to schedule content, analyze performance, and manage engagement across multiple platforms from a single dashboard.",
+            features: [
+                "Cross-platform content scheduling and publishing",
+                "Engagement analytics and audience insights",
+                "Content calendar with drag-and-drop interface",
+                "Automated reporting and performance tracking",
+                "AI-assisted content recommendations"
+            ],
+            screenshots: ["content-calendar.jpg", "analytics-dashboard.jpg", "engagement-metrics.jpg"],
+            challengesSolved: "Integrated with multiple social media APIs and normalized their different data structures into a unified interface. Implemented a reliable scheduling system that handles timezone differences and platform-specific posting requirements.",
+            githubLink: "https://github.com/username/social-media-manager",
+            liveDemo: "https://social-media-manager-demo.com"
         }
     ];
 
@@ -482,7 +544,7 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                         transition={{ duration: 0.2 }}
                     >
                         {isMobile ? (
-                            // Optimized mobile modal with reduced animations for better performance
+                            // Mobile modal with enhanced content
                             <motion.div
                                 className="bg-gray-900 border border-gray-700 rounded-lg w-full max-w-xs overflow-hidden max-h-[90vh] overflow-y-auto"
                                 onClick={(e) => e.stopPropagation()}
@@ -505,7 +567,6 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                         className="w-full h-full object-cover"
                                         loading="lazy"
                                     />
-                                    {/* <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div> */}
 
                                     {/* Project Badge */}
                                     <motion.div
@@ -529,7 +590,7 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                     </button>
                                 </div>
 
-                                {/* Modal Content - Simplified animations for mobile */}
+                                {/* Modal Content - Enhanced for mobile */}
                                 <motion.div
                                     className="p-4"
                                     initial={{ opacity: 0 }}
@@ -552,28 +613,45 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                     </div>
 
                                     <p className="text-gray-300 mb-4 text-sm">
-                                        {selectedProject.description}
+                                        {selectedProject.longDescription}
                                     </p>
 
-                                    <p className="text-gray-400 mb-4 text-xs">
-                                        This is an extended description of the project that provides more details about
-                                        its purpose, features, challenges faced during development, and the solutions implemented.
-                                        This information only appears in the modal view.
-                                    </p>
+                                    {/* Key Features Section */}
+                                    <div className="mb-4">
+                                        <h4 className="text-white text-sm font-semibold mb-2">Key Features</h4>
+                                        <ul className="text-gray-400 text-xs space-y-1.5">
+                                            {selectedProject.features.map((feature, idx) => (
+                                                <li key={idx} className="flex items-start">
+                                                    <span className="text-orange-400 mr-1.5">•</span>
+                                                    <span>{feature}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    {/* Technical Challenges */}
+                                    <div className="mb-4">
+                                        <h4 className="text-white text-sm font-semibold mb-2">Challenges & Solutions</h4>
+                                        <p className="text-gray-400 text-xs">
+                                            {selectedProject.challengesSolved}
+                                        </p>
+                                    </div>
 
                                     {/* Action Buttons */}
                                     <div className="flex flex-wrap gap-3 mt-6">
-                                        <button
-                                            className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-1.5 rounded-lg font-medium transition-colors flex items-center text-sm"
-                                        >
+                                        <button className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-1.5 rounded-lg font-medium transition-colors flex items-center text-sm">
                                             <FaGithub className="mr-2" />
                                             <span>View Code</span>
+                                        </button>
+                                        <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-1.5 rounded-lg font-medium transition-colors flex items-center text-sm">
+                                            <FaExternalLinkAlt className="mr-2" />
+                                            <span>Live Demo</span>
                                         </button>
                                     </div>
                                 </motion.div>
                             </motion.div>
                         ) : (
-                            // Enhanced animated modal for desktop with shared element transitions
+                            // Enhanced desktop modal with rich content
                             <motion.div
                                 layoutId={`project-card-${selectedProject.id}`}
                                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -599,7 +677,6 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                         className="w-full h-full object-cover"
                                         loading="lazy"
                                     />
-                                    {/* <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div> */}
 
                                     {/* Project Badge */}
                                     <motion.div
@@ -629,7 +706,7 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                     </motion.button>
                                 </motion.div>
 
-                                {/* Modal Content with Staggered Animation */}
+                                {/* Enhanced Modal Content with Staggered Animation */}
                                 <div className="p-6">
                                     <motion.div
                                         initial="hidden"
@@ -667,7 +744,7 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                                     }
                                                 }
                                             }}
-                                            className="flex flex-wrap gap-2 mb-6"
+                                            className="flex flex-wrap gap-2 mb-4"
                                         >
                                             {selectedProject.tech.map((tech, index) => (
                                                 <motion.span
@@ -691,20 +768,79 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                             }}
                                             className="text-gray-300 mb-6 text-base"
                                         >
-                                            {selectedProject.description}
+                                            {selectedProject.longDescription}
                                         </motion.p>
 
-                                        <motion.p
+                                        {/* Project Screenshots */}
+                                        <motion.div
                                             variants={{
                                                 hidden: { opacity: 0, y: 10 },
                                                 visible: { opacity: 1, y: 0 }
                                             }}
-                                            className="text-gray-400 mb-6 text-sm"
+                                            className="mb-6"
                                         >
-                                            This is an extended description of the project that provides more details about
-                                            its purpose, features, challenges faced during development, and the solutions implemented.
-                                            This information only appears in the modal view.
-                                        </motion.p>
+                                            <h4 className="text-white text-sm font-semibold mb-3">Project Gallery</h4>
+                                            <div className="grid grid-cols-3 gap-2">
+                                                {selectedProject.screenshots.map((screenshot, idx) => (
+                                                    <div key={idx} className="bg-gray-800 rounded-lg overflow-hidden aspect-video">
+                                                        <img
+                                                            src={screenshot}
+                                                            alt={`${selectedProject.title} screenshot ${idx + 1}`}
+                                                            className="w-full h-full object-cover opacity-75 hover:opacity-100 transition-opacity"
+                                                            loading="lazy"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Key Features with Icons */}
+                                        <motion.div
+                                            variants={{
+                                                hidden: { opacity: 0, y: 10 },
+                                                visible: { opacity: 1, y: 0 }
+                                            }}
+                                            className="mb-6"
+                                        >
+                                            <h4 className="text-white text-sm font-semibold mb-3">Key Features</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {selectedProject.features.map((feature, idx) => (
+                                                    <motion.div
+                                                        key={idx}
+                                                        variants={{
+                                                            hidden: { opacity: 0, x: -10 },
+                                                            visible: { opacity: 1, x: 0, transition: { delay: idx * 0.1 } }
+                                                        }}
+                                                        className="flex items-start bg-gray-800/50 p-3 rounded-lg"
+                                                    >
+                                                        <div className="text-orange-400 mr-3 mt-0.5">
+                                                            {idx % 5 === 0 && <MdDevices />}
+                                                            {idx % 5 === 1 && <MdSecurity />}
+                                                            {idx % 5 === 2 && <MdSpeed />}
+                                                            {idx % 5 === 3 && <FaLaptopCode />}
+                                                            {idx % 5 === 4 && <MdOutlineDesignServices />}
+                                                        </div>
+                                                        <span className="text-gray-300 text-sm">{feature}</span>
+                                                    </motion.div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+
+                                        {/* Technical Challenges & Solutions */}
+                                        <motion.div
+                                            variants={{
+                                                hidden: { opacity: 0, y: 10 },
+                                                visible: { opacity: 1, y: 0 }
+                                            }}
+                                            className="mb-6"
+                                        >
+                                            <h4 className="text-white text-sm font-semibold mb-3">Challenges & Solutions</h4>
+                                            <div className="bg-gray-800/50 p-4 rounded-lg">
+                                                <p className="text-gray-300 text-sm">
+                                                    {selectedProject.challengesSolved}
+                                                </p>
+                                            </div>
+                                        </motion.div>
 
                                         {/* Action Buttons */}
                                         <motion.div
@@ -714,14 +850,18 @@ const Projects = ({ setModalOpen, setSelectedProject, isAnimatingRef, projectsRe
                                             }}
                                             className="flex flex-wrap gap-4 mt-8"
                                         >
-                                            <motion.button
+                                            <motion.a
+                                                href={selectedProject.githubLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center text-sm"
+                                                className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center text-sm"
                                             >
                                                 <FaGithub className="mr-2" />
                                                 <span>View Code</span>
-                                            </motion.button>
+                                            </motion.a>
+                                            
                                         </motion.div>
                                     </motion.div>
                                 </div>
